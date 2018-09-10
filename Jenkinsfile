@@ -15,7 +15,7 @@ pipeline {
                     o.waitFor()
                     def json = o.text
 
-                    def js = new JsonSlurper()
+                    def js = new groovy.json.JsonSlurper()
                     def o = js.parseText(json)
                     env.array = []
 
