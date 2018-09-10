@@ -10,7 +10,7 @@ pipeline {
             
             steps {
                 container('jenkins-slave-builder') {
-                    script }
+                    script {
                         dockerVersions = sh(returnStdout: true, script: '''
                             gcloud container images list-tags --format='value(TAGS)' asia.gcr.io/white-berm-210209/camel-gke | 
                             tr '\n' ',' | sed 's/,$//'
