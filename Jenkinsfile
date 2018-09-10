@@ -12,8 +12,8 @@ pipeline {
                 container('jenkins-slave-builder') {
                     script {
                         dockerVersions = sh(returnStdout: true, script: '''
-                            gcloud container images list-tags --format='value(TAGS)' 
-                                    asia.gcr.io/white-berm-210209/camel-gke | 
+                            gcloud container images list-tags --format='value(TAGS)' \
+                                    asia.gcr.io/white-berm-210209/camel-gke | \
                                     tr '\n' ',' | sed 's/,$//'
                         ''').trim()
                         
@@ -22,23 +22,23 @@ pipeline {
                             parameters: [choice(name: 'DOCKER_IMAGE_VERSION', 
                                                 choices: versions, description: 'Select docker image version')]
                         sh '''
-                            gcloud container clusters get-credentials 
+                            gcloud container clusters get-credentials \
                                 jenkins-cd --zone asia-east1-b --project white-berm-210209
                             
-                            retVal=$(kubectl get deployment/camel-gke -n ${targetNamespace}) || 
+                            retVal=$(kubectl get deployment/camel-gke -n ${targetNamespace}) || \
                                 echo "Deployment does not exist for camel-gke in namespace ${targetNamespace}"
                             
                             if [ -z "${retVal}" ] ;then
                                 echo "Creating new deployment"
                                 
                                 kubectl run camel-gke 
-                                    --image=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} 
+                                    --image=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} \
                                     -n ${targetNamespace}
                             
                             else
                                 echo "Updating exising deployemnt to new image"
-                                kubectl set image deployment/camel-gke 
-                                    camel-gke=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} 
+                                kubectl set image deployment/camel-gke \
+                                    camel-gke=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} \
                                     -n ${targetNamespace}
                             fi
                         '''
