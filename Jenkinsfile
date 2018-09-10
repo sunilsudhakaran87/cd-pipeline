@@ -20,6 +20,7 @@ pipeline {
                         env.dockerImageVersion = input message: 'User input required', ok: 'Select!',
                             parameters: [choice(name: 'RELEASE_SCOPE', choices: versions, description: 'Select docker image version')]
                         sh '''
+                            gcloud container clusters get-credentials jenkins-cd --zone asia-east1-b --project white-berm-210209
                             retVal=$(kubectl get deployment/camel-gke -n ${targetNamespace}) || 
                                 echo "Deployment does not exist for camel-gke in namespace ${targetNamespace}"
                             if [ -z "${retVal}" ] ;then
