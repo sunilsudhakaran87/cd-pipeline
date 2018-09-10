@@ -15,6 +15,10 @@ pipeline {
                             gcloud container images list-tags --format='value(TAGS)' asia.gcr.io/white-berm-210209/camel-gke | 
                             tr '\n' ',' | sed 's/,$//'
                         ''').trim()
+                        
+                        versions = dockerVersions.replaceAll(',', '\\\\n')
+                        env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: versions, description: 'Select docker image version')]
                     }
                     
                     /*
