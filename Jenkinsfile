@@ -11,22 +11,12 @@ pipeline {
             steps {
                 container('jenkins-slave-builder') {
                     
-                    script {
-                        def cmd = "gcloud container images list-tags --format='json' asia.gcr.io/white-berm-210209/camel-gke"
-                        o = cmd.execute()
-                        o.waitFor()
-                        def json = o.text
-
-                        def js = new groovy.json.JsonSlurper()
-                        def o = js.parseText(json)
-                        env.array = []
-
-                        o.each {
-                            env.array.push(it.tags[0])
-                        }  
-
-                        env.array.join('\n')
-                    }
+                    dockerVersions = sh(returnStdout: true, script: '''
+                        gcloud container images list-tags --format='value(TAGS)' asia.gcr.io/white-berm-210209/camel-gke | 
+                        tr '\n' ',' | sed 's/,$//'
+                    ''').trim()
+                    
+                    
                     /*
                     script {
                         env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
