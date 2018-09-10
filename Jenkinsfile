@@ -31,7 +31,7 @@ pipeline {
                             if [ -z "${retVal}" ] ;then
                                 echo "Creating new deployment"
                                 
-                                kubectl run camel-gke 
+                                kubectl run camel-gke \
                                     --image=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} \
                                     -n ${targetNamespace}
                             
