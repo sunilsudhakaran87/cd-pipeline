@@ -16,7 +16,7 @@ pipeline {
                             tr '\n' ',' | sed 's/,$//'
                         ''').trim()
                         
-                        versions = dockerVersions.replaceAll(',', '\\\\n')
+                        versions = dockerVersions.replaceAll(',', '\n')
                         env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select!',
                             parameters: [choice(name: 'RELEASE_SCOPE', choices: versions, description: 'Select docker image version')]
                     }
