@@ -17,8 +17,19 @@ pipeline {
                         ''').trim()
                         
                         versions = dockerVersions.replaceAll(',', '\n')
-                        env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select!',
+                        env.dockerImageVersion = input message: 'User input required', ok: 'Select!',
                             parameters: [choice(name: 'RELEASE_SCOPE', choices: versions, description: 'Select docker image version')]
+                        sh '''
+                            retVal=$(kubectl get deployment/camel-gke -n ${targetNamespace}) || 
+                                echo "Deployment does not exist for camel-gke in namespace ${targetNamespace}"
+                            if [ -z "${retVal}" ] ;then
+                                echo "Creating new deployment"
+                                kubectl run camel-gke --image=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} -n ${targetNamespace}
+                            else
+                                echo "Updating exising deployemnt to new image"
+                                kubectl set image deployment/camel-gke camel-gke=asia.gcr.io/white-berm-210209/camel-gke:${dockerImageVersion} -n ${targetNamespace}
+                            fi
+                        '''
                     }
                     
                     /*
