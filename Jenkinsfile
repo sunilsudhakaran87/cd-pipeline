@@ -23,7 +23,9 @@ pipeline {
                                 parameters: [choice(name: 'DOCKER_IMAGE_VERSION',
                                         choices: versions, description: 'Select docker image version')]
                                     sh '''
-                                        gcloud auth application-default login
+                                        echo $GOOGLE_APPLICATION_CREDENTIALS
+                                        export GOOGLE_APPLICATION_CREDENTIALS=$GC_KEY
+                                        echo $GOOGLE_APPLICATION_CREDENTIALS
                                         gcloud container clusters get-credentials \
                                            ${clusterName} --zone ${zoneName} --project ${projectName}
 
