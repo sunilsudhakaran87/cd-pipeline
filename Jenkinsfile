@@ -12,7 +12,8 @@ pipeline {
                 container('custom-jenkins-slave') {
                     script {
                         sh '''
-                           ls -ltra 
+                           echo ${HOME}
+                           ls -ltra ~
                             gcloud container clusters get-credentials \
                                 ${clusterName} --zone ${zoneName} --project ${projectName}
                         '''
