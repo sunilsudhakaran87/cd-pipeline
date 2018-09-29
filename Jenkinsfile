@@ -11,6 +11,11 @@ pipeline {
             steps {
                 container('custom-jenkins-slave') {
                     script {
+                        sh '''
+                           ls -ltra 
+                            gcloud container clusters get-credentials \
+                                ${clusterName} --zone ${zoneName} --project ${projectName}
+                        '''
                         dockerVersions = sh(returnStdout: true, script: '''
                             gcloud container images list-tags --format='value(TAGS)' \
                                     ${regionName}/${projectName}/${applicationName} | \
