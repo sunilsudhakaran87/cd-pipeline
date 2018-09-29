@@ -32,7 +32,7 @@ pipeline {
                                 echo "Creating new deployment"
                                 
                                 kubectl run ${applicationName} \
-                                    --image=${regionName}/${projectName}/${applicationName}-gke:${dockerImageVersion} \
+                                    --image=${regionName}/${projectName}/${applicationName}:${dockerImageVersion} \
                                     -n ${targetNamespace}
                             
                             else
