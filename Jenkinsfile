@@ -40,18 +40,18 @@ pipeline {
                                 kubectl set image deployment/${applicationName} \
                                     ${applicationName}=${regionName}/${projectName}/${applicationName}:${dockerImageVersion} \
                                     -n ${targetNamespace}
-                                
-                                svcExists=$(kubectl get svc/${applicationName} -n ${targetNamespace}) || \
+                            fi
+                            
+                            svcExists=$(kubectl get svc/${applicationName} -n ${targetNamespace}) || \
                                     echo "Kubernetes service does not exist for ${applicationName} in namespace ${targetNamespace}"
                                 
-                                if [ -z "${svcExists}" ] ;then
-                                    echo "Creating new service"
-                                
-                                    kubectl expose deployment ${applicationName} \
-                                        --port=8080 -n ${targetNamespace}
-                                else
-                                    echo "Kubernetes service already exists for ${applicationName}"
-                                fi
+                            if [ -z "${svcExists}" ] ;then
+                                echo "Creating new service"
+
+                                kubectl expose deployment ${applicationName} \
+                                    --port=8080 -n ${targetNamespace}
+                            else
+                                echo "Kubernetes service already exists for ${applicationName}"
                             fi
                         '''
                     }
