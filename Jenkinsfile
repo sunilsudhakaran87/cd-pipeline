@@ -6,7 +6,7 @@ pipeline {
     }
 
     stages {       
-        stage('Test it all') {
+        stage('Trigger deployment') {
             
             steps {
                 container('custom-jenkins-slave') {
