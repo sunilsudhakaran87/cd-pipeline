@@ -2,14 +2,14 @@ pipeline {
 
     
     agent {
-        label 'jenkins-k8s-slave-label'
+        label 'image-builder'
     }
 
     stages {       
         stage('Trigger deployment') {
             
             steps {
-                container('custom-jenkins-slave') {
+                container('application-image-builder') {
                     script {
                         dockerVersions = sh(returnStdout: true, script: '''
                             gcloud container images list-tags --format='value(TAGS)' \
