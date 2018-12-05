@@ -23,8 +23,11 @@ pipeline {
                                 parameters: [choice(name: 'DOCKER_IMAGE_VERSION', 
                                                     choices: versions, description: 'Select docker image version')]
                             sh '''
-                                gcloud container clusters get-credentials \
-                                    ${clusterName} --zone ${zoneName} --project ${projectName}
+                                #gcloud container clusters get-credentials \
+                                #    ${clusterName} --zone ${zoneName} --project ${projectName}
+                                
+                                gcloud auth activate-service-account 752887326428-compute@developer.gserviceaccount.com \
+                                    --key-file=${GC_AUTH_KEY}
                                 
                                 retVal=$(kubectl get deployment/${applicationName} -n ${targetNamespace}) || \
                                     echo "Deployment does not exist for ${applicationName} in namespace ${targetNamespace}"
