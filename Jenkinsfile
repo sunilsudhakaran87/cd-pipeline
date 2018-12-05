@@ -28,6 +28,9 @@ pipeline {
 
                                 gcloud auth activate-service-account 752887326428-compute@developer.gserviceaccount.com \
                                     --key-file=${GC_AUTH_KEY}
+                            '''
+                        }
+                        sh '''
 
                                 retVal=$(kubectl get deployment/${applicationName} -n ${targetNamespace}) || \
                                     echo "Deployment does not exist for ${applicationName} in namespace ${targetNamespace}"
@@ -57,8 +60,7 @@ pipeline {
                                 else
                                     echo "Kubernetes service already exists for ${applicationName}"
                                 fi
-                            '''
-                        }
+                          '''                        
                     }
                     
                     /*
