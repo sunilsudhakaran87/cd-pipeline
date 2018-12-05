@@ -9,7 +9,7 @@ pipeline {
         stage('Trigger deployment') {
             
             steps {
-                withCredentials([file(credentialsId: 'deployer-service-account', variable: 'GC_AUTH_KEY') {
+                withCredentials([file(credentialsId: 'deployer-service-account', variable: 'GC_AUTH_KEY')]) {
                     container('application-image-builder') {
                         script {
                             dockerVersions = sh(returnStdout: true, script: '''
